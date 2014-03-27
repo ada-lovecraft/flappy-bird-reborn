@@ -1,0 +1,7 @@
+{
+  "name": "flappy-bird-reborn",
+  "version": "0.0.0",
+  "dependencies": {
+    "phaser-official": "2.0.1"
+  }
+}
