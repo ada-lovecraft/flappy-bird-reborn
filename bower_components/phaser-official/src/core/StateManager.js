@@ -8,7 +8,7 @@
 
 /**
 * The State Manager is responsible for loading, setting up and switching game states.
-* 
+*
 * @class Phaser.StateManager
 * @constructor
 * @param {Phaser.Game} game - A reference to the currently running game.
@@ -75,7 +75,7 @@ Phaser.StateManager = function (game, pendingState) {
     * @property {function} onPreloadCallback - This will be called when init states (loading assets...).
     */
     this.onPreloadCallback = null;
-    
+
     /**
     * @property {function} onCreateCallback - This will be called when create states (setup states...).
     */
@@ -206,7 +206,7 @@ Phaser.StateManager.prototype = {
     */
     remove: function (key) {
 
-        if (this.current == key)
+        if (this.current === key)
         {
             this.callbackContext = null;
 
@@ -256,7 +256,32 @@ Phaser.StateManager.prototype = {
         }
 
     },
-    
+
+    /**
+    * Restarts the current State. State.shutDown will be called (if it exists) before the State is restarted.
+    *
+    * @method Phaser.StateManager#restart
+    * @param {boolean} [clearWorld=true] - Clear everything in the world? This clears the World display list fully (but not the Stage, so if you've added your own objects to the Stage they will need managing directly)
+    * @param {boolean} [clearCache=false] - Clear the Game.Cache? This purges out all loaded assets. The default is false and you must have clearWorld=true if you want to clearCache as well.
+    * @param {...*} parameter - Additional parameters that will be passed to the State.init function if it has one.
+    */
+    restart: function (clearWorld, clearCache) {
+
+        if (typeof clearWorld === "undefined") { clearWorld = true; }
+        if (typeof clearCache === "undefined") { clearCache = false; }
+
+        //  Place the state in the queue. It will be started the next time the game loop starts.
+        this._pendingState = this.current;
+        this._clearWorld = clearWorld;
+        this._clearCache = clearCache;
+
+        if (arguments.length > 3)
+        {
+            this._args = Array.prototype.splice.call(arguments, 3);
+        }
+
+    },
+
     /**
     * Used by onInit and onShutdown when those functions don't exist on the state
     * @method Phaser.StateManager#dummy
@@ -552,7 +577,8 @@ Phaser.StateManager.prototype = {
     },
 
     /**
-    * Nuke the entire game from orbit
+    * Removes all StateManager callback references to the State object, nulls the game reference and clears the States object.
+    * You don't recover from this without rebuilding the Phaser instance again.
     * @method Phaser.StateManager#destroy
     */
     destroy: function () {

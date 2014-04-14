@@ -60,12 +60,12 @@ Phaser.Line.prototype = {
     * @method Phaser.Line#fromSprite
     * @param {Phaser.Sprite} startSprite - The coordinates of this Sprite will be set to the Line.start point.
     * @param {Phaser.Sprite} endSprite - The coordinates of this Sprite will be set to the Line.start point.
-    * @param {boolean} [useCenter=true] - If true it will use startSprite.center.x, if false startSprite.x.
+    * @param {boolean} [useCenter=false] - If true it will use startSprite.center.x, if false startSprite.x. Note that Sprites don't have a center property by default, so only enable if you've over-ridden your Sprite with a custom class.
     * @return {Phaser.Line} This line object
     */
     fromSprite: function (startSprite, endSprite, useCenter) {
 
-        if (typeof useCenter === 'undefined') { useCenter = true; }
+        if (typeof useCenter === 'undefined') { useCenter = false; }
 
         if (useCenter)
         {
@@ -158,7 +158,7 @@ Phaser.Line.prototype = {
         while (!((x1 == x2) && (y1 == y2)))
         {
             var e2 = err << 1;
-    
+
             if (e2 > -dy)
             {
                 err -= dy;
@@ -377,7 +377,7 @@ Phaser.Line.intersectsPoints = function (a, b, e, f, asSegment, result) {
 
     result.x = ((b1 * c2) - (b2 * c1)) / denom;
     result.y = ((a2 * c1) - (a1 * c2)) / denom;
- 
+
     if (asSegment)
     {
         if (Math.pow((result.x - b.x) + (result.y - b.y), 2) > Math.pow((a.x - b.x) + (a.y - b.y), 2))

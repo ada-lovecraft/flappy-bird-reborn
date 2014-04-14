@@ -1,3 +1,4 @@
+/* jshint wsh:true */
 /**
 * @author       Richard Davey <rich@photonstorm.com>
 * @copyright    2014 Photon Storm Ltd.
@@ -79,7 +80,7 @@ Phaser.Loader = function (game) {
     this.preloadSprite = null;
 
     /**
-    * @property {boolean|string} crossOrigin - The crossOrigin value applied to loaded images.
+    * @property {boolean|string} crossOrigin - The crossOrigin value applied to loaded images. Very often this needs to be set to 'anonymous'.
     * @default
     */
     this.crossOrigin = false;
@@ -97,17 +98,17 @@ Phaser.Loader = function (game) {
     * @property {Phaser.Signal} onFileComplete - Event signal.
     */
     this.onFileComplete = new Phaser.Signal();
-    
+
     /**
     * @property {Phaser.Signal} onFileError - Event signal.
     */
     this.onFileError = new Phaser.Signal();
-    
+
     /**
     * @property {Phaser.Signal} onLoadStart - Event signal.
     */
     this.onLoadStart = new Phaser.Signal();
-    
+
     /**
     * @property {Phaser.Signal} onLoadComplete - Event signal.
     */
@@ -137,7 +138,13 @@ Phaser.Loader.TEXTURE_ATLAS_XML_STARLING = 2;
 * @constant
 * @type {number}
 */
-Phaser.Loader.PHYSICS_LIME_CORONA = 3;
+Phaser.Loader.PHYSICS_LIME_CORONA_JSON = 3;
+
+/**
+* @constant
+* @type {number}
+*/
+Phaser.Loader.PHYSICS_PHASER_JSON = 4;
 
 Phaser.Loader.prototype = {
 
@@ -195,7 +202,7 @@ Phaser.Loader.prototype = {
         }
 
         return false;
-        
+
     },
 
     /**
@@ -220,7 +227,7 @@ Phaser.Loader.prototype = {
         }
 
         return -1;
-        
+
     },
 
     /**
@@ -245,7 +252,7 @@ Phaser.Loader.prototype = {
         }
 
         return false;
-        
+
     },
 
     /**
@@ -1163,10 +1170,10 @@ Phaser.Loader.prototype = {
 
                     if (file.autoDecode)
                     {
-                        this.game.cache.updateSound(key, 'isDecoding', true);
-
                         var that = this;
                         var key = file.key;
+
+                        this.game.cache.updateSound(key, 'isDecoding', true);
 
                         this.game.sound.context.decodeAudioData(file.data, function (buffer) {
                             if (buffer)
@@ -1402,7 +1409,7 @@ Phaser.Loader.prototype = {
         {
             this.hasLoaded = true;
             this.isLoading = false;
-            
+
             this.removeAll();
 
             this.onLoadComplete.dispatch();

@@ -371,7 +371,7 @@ Phaser.Cache.prototype = {
     * Add a new text data.
     *
     * @method Phaser.Cache#addText
-    * @param {string} key - Asset key for the text data. 
+    * @param {string} key - Asset key for the text data.
     * @param {string} url - URL of this text data file.
     * @param {object} data - Extra text data.
     */
@@ -385,7 +385,7 @@ Phaser.Cache.prototype = {
     * Add a new json object into the cache.
     *
     * @method Phaser.Cache#addJSON
-    * @param {string} key - Asset key for the text data. 
+    * @param {string} key - Asset key for the text data.
     * @param {string} url - URL of this text data file.
     * @param {object} data - Extra text data.
     */
@@ -485,7 +485,7 @@ Phaser.Cache.prototype = {
     * @param {string} key - Asset key for the sound.
     */
     updateSound: function (key, property, value) {
-        
+
         if (this._sounds[key])
         {
             this._sounds[key][property] = value;
@@ -569,14 +569,15 @@ Phaser.Cache.prototype = {
     },
 
     /**
-    * Get a physics data object from the cache by its key. You can get either the entire data set or just a single object from it.
+    * Get a physics data object from the cache by its key. You can get either the entire data set, a single object or a single fixture of an object from it.
     *
     * @method Phaser.Cache#getPhysicsData
     * @param {string} key - Asset key of the physics data object to retrieve from the Cache.
     * @param {string} [object=null] - If specified it will return just the physics object that is part of the given key, if null it will return them all.
+    * @param {string} fixtureKey - Fixture key of fixture inside an object. This key can be set per fixture with the Phaser Exporter.
     * @return {object} The requested physics object data if found.
     */
-    getPhysicsData: function (key, object) {
+    getPhysicsData: function (key, object, fixtureKey) {
 
         if (typeof object === 'undefined' || object === null)
         {
@@ -594,14 +595,38 @@ Phaser.Cache.prototype = {
         {
             if (this._physics[key] && this._physics[key].data[object])
             {
-                return this._physics[key].data[object];
+                var fixtures = this._physics[key].data[object];
+
+                //try to find a fixture by it's fixture key if given
+                if (fixtures && fixtureKey)
+                {
+                    for (var fixture in fixtures)
+                    {
+                        //  This contains the fixture data of a polygon or a circle
+                        fixture = fixtures[fixture];
+
+                        //  Test the key
+                        if (fixture.fixtureKey === fixtureKey)
+                        {
+                            return fixture;
+                        }
+
+                    }
+                    
+                    //  We did not find the requested fixture
+                    console.warn('Phaser.Cache.getPhysicsData: Could not find given fixtureKey: "' + fixtureKey + ' in ' + key + '"');
+                }
+                else
+                {
+                    return fixtures;
+                }
             }
             else
             {
                 console.warn('Phaser.Cache.getPhysicsData: Invalid key/object: "' + key + ' / ' + object + '"');
             }
         }
-        
+
         return null;
 
     },
@@ -890,7 +915,7 @@ Phaser.Cache.prototype = {
         {
             console.warn('Phaser.Cache.getText: Invalid key: "' + key + '"');
         }
-        
+
     },
 
     /**
@@ -910,7 +935,7 @@ Phaser.Cache.prototype = {
         {
             console.warn('Phaser.Cache.getJSON: Invalid key: "' + key + '"');
         }
-        
+
     },
 
     /**
@@ -930,7 +955,7 @@ Phaser.Cache.prototype = {
         {
             console.warn('Phaser.Cache.getBinary: Invalid key: "' + key + '"');
         }
-        
+
     },
 
     /**

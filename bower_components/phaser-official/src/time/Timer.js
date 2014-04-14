@@ -231,15 +231,16 @@ Phaser.Timer.prototype = {
     /**
     * Starts this Timer running.
     * @method Phaser.Timer#start
+    * @param {number} [delay=0] - The number of milliseconds that should elapse before the Timer will start.
     */
-    start: function () {
+    start: function (delay) {
 
         if (this.running)
         {
             return;
         }
 
-        this._started = this.game.time.now;
+        this._started = this.game.time.now + (delay || 0);
 
         this.running = true;
 
@@ -427,7 +428,7 @@ Phaser.Timer.prototype = {
     * @method Phaser.Timer#pause
     */
     pause: function () {
-        
+
         if (this.running && !this.expired)
         {
             this._pauseStarted = this.game.time.now;
@@ -444,7 +445,7 @@ Phaser.Timer.prototype = {
     * @private
     */
     _pause: function () {
-        
+
         if (this.running && !this.expired)
         {
             this._pauseStarted = this.game.time.now;
@@ -551,7 +552,7 @@ Object.defineProperty(Phaser.Timer.prototype, "next", {
 Object.defineProperty(Phaser.Timer.prototype, "duration", {
 
     get: function () {
-        
+
         if (this.running && this.nextTick > this._now)
         {
             return this.nextTick - this._now;

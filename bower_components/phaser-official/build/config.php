@@ -118,6 +118,7 @@
     <script src="$path/src/gameobjects/RenderTexture.js"></script>
     <script src="$path/src/gameobjects/SpriteBatch.js"></script>
     <script src="$path/src/gameobjects/RetroFont.js"></script>
+    <script src="$path/src/gameobjects/Particle.js"></script>
 
     <script src="$path/src/system/Canvas.js"></script>
     <script src="$path/src/system/Device.js"></script>
@@ -181,6 +182,7 @@ EOL;
         echo <<<EOL
 
     <script src="$path/src/physics/p2/World.js"></script>
+    <script src="$path/src/physics/p2/FixtureList.js"></script>
     <script src="$path/src/physics/p2/PointProxy.js"></script>
     <script src="$path/src/physics/p2/InversePointProxy.js"></script>
     <script src="$path/src/physics/p2/Body.js"></script>

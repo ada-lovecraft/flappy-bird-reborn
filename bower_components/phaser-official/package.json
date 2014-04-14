@@ -1,7 +1,7 @@
 {
   "name": "Phaser",
-  "version": "2.0.1",
-  "release": "Lyrelle",
+  "version": "2.0.3",
+  "release": "Allorallen",
   "description": "A fast, free and fun HTML5 Game Framework for Desktop and Mobile web browsers.",
   "author": "Richard Davey",
   "logo": "https://raw.github.com/photonstorm/phaser/master/phaser-logo-small.png",
@@ -12,6 +12,9 @@
   "repository": {
     "type": "git",
     "url": "https://photonstorm@github.com/photonstorm/phaser.git"
+  },
+  "scripts": {
+    "test": "NODE_ENV=test grunt jshint"
   },
   "keywords": [
     "HTML5",
@@ -26,13 +29,14 @@
     "typescript"
   ],
   "devDependencies": {
-    "grunt": "~0.4.1",
-    "grunt-contrib-concat": "~0.3.0",
-    "grunt-contrib-connect": "~0.5.0",
-    "grunt-contrib-copy": "~0.5.0",
-    "grunt-contrib-clean": "~0.5.0",
-    "grunt-contrib-uglify": "~0.3.3",
-    "lodash": "~2.2.1",
-    "grunt-text-replace": "~0.3.11"
+    "grunt": "^0.4.1",
+    "grunt-contrib-clean": "^0.5.0",
+    "grunt-contrib-concat": "^0.4.0",
+    "grunt-contrib-connect": "^0.7.1",
+    "grunt-contrib-copy": "^0.5.0",
+    "grunt-contrib-jshint": "^0.9.2",
+    "grunt-contrib-uglify": "^0.4.0",
+    "grunt-text-replace": "^0.3.11",
+    "load-grunt-config": "~0.7.2"
   }
 }

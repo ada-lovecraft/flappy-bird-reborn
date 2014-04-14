@@ -125,7 +125,7 @@ Phaser.Tween = function (object, game, manager) {
     * @default null
     */
     this._onUpdateCallback = null;
-   
+
     /**
     * @property {object} _onUpdateCallbackContext - The context in which to call the onUpdate callback.
     * @private
@@ -164,7 +164,7 @@ Phaser.Tween = function (object, game, manager) {
     // {
     //     this._valuesStart[field] = parseFloat(object[field], 10);
     // }
-    
+
     /**
     * @property {Phaser.Signal} onStart - The onStart event is fired when the Tween begins.
     */
@@ -200,7 +200,7 @@ Phaser.Tween.prototype = {
     * @param {boolean} [autoStart=false] - Whether this tween will start automatically or not.
     * @param {number} [delay=0] - Delay before this tween will start, defaults to 0 (no delay). Value given is in ms.
     * @param {number} [repeat=0] - Should the tween automatically restart once complete? If you want it to run forever set as Number.MAX_VALUE. This ignores any chained tweens.
-    * @param {boolean} [yoyo=false] - A tween that yoyos will reverse itself when it completes.
+    * @param {boolean} [yoyo=false] - A tween that yoyos will reverse itself and play backwards automatically. A yoyo'd tween doesn't fire the Tween.onComplete event, so listen for Tween.onLoop instead.
     * @return {Phaser.Tween} This Tween object.
     */
     to: function (properties, duration, ease, autoStart, delay, repeat, yoyo) {
@@ -349,7 +349,7 @@ Phaser.Tween.prototype = {
 
         //  Simulate the tween. We will run for frameRate * (this._duration / 1000) (ms)
         var time = 0;
-        var total = frameRate * (this._duration / 1000);
+        var total = Math.floor(frameRate * (this._duration / 1000));
         var tick = this._duration / total;
 
         var output = [];
@@ -476,7 +476,7 @@ Phaser.Tween.prototype = {
     },
 
     /**
-    * Set easing function this tween will use, i.e. Phaser.Easing.Linear.None. 
+    * Set easing function this tween will use, i.e. Phaser.Easing.Linear.None.
     *
     * @method Phaser.Tween#easing
     * @param {function} easing - The easing function this tween will use, i.e. Phaser.Easing.Linear.None.
@@ -520,7 +520,7 @@ Phaser.Tween.prototype = {
 
     /**
     * Loop a chain of tweens
-    * 
+    *
     * Usage:
     * game.add.tween(p).to({ x: 700 }, 1000, Phaser.Easing.Linear.None, true)
     * .to({ y: 300 }, 1000, Phaser.Easing.Linear.None)
@@ -554,7 +554,7 @@ Phaser.Tween.prototype = {
     },
 
     /**
-    * Pauses the tween. 
+    * Pauses the tween.
     *
     * @method Phaser.Tween#pause
     */
@@ -572,7 +572,7 @@ Phaser.Tween.prototype = {
     * @private
     */
     _pause: function () {
-        
+
         if (!this._codePaused)
         {
             this._paused = true;
@@ -737,7 +737,7 @@ Phaser.Tween.prototype = {
         return true;
 
     }
-    
+
 };
 
 Phaser.Tween.prototype.constructor = Phaser.Tween;

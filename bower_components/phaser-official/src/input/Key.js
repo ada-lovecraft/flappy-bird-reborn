@@ -14,9 +14,15 @@
 Phaser.Key = function (game, keycode) {
 
     /**
-    * @property {Phaser.Game} game - A reference to the currently running game. 
+    * @property {Phaser.Game} game - A reference to the currently running game.
     */
     this.game = game;
+
+    /**
+    * @property {boolean} enabled - An enabled key processes its update and dispatches events. You can toggle this at run-time to disable a key without deleting it.
+    * @default
+    */
+    this.enabled = true;
 
     /**
     * @property {object} event - Stores the most recent DOM event.
@@ -103,12 +109,14 @@ Phaser.Key = function (game, keycode) {
     * @property {Phaser.Signal} onUp - This Signal is dispatched every time this Key is pressed down. It is only dispatched once (until the key is released again).
     */
     this.onUp = new Phaser.Signal();
-    
+
 };
 
 Phaser.Key.prototype = {
 
     update: function () {
+
+        if (!this.enabled) { return; }
 
         if (this.isDown)
         {
@@ -130,6 +138,8 @@ Phaser.Key.prototype = {
     * @protected
     */
     processKeyDown: function (event) {
+
+        if (!this.enabled) { return; }
 
         this.event = event;
 
@@ -160,6 +170,8 @@ Phaser.Key.prototype = {
     */
     processKeyUp: function (event) {
 
+        if (!this.enabled) { return; }
+
         this.event = event;
 
         if (this.isUp)
@@ -177,7 +189,8 @@ Phaser.Key.prototype = {
     },
 
     /**
-    * Resets the state of this Key.
+    * Resets the state of this Key. This sets isDown to false, isUp to true, resets the time to be the current time and clears any callbacks
+    * associated with the onDown and onUp events and nulls the onHoldCallback if set.
     *
     * @method Phaser.Key#reset
     */
@@ -187,6 +200,12 @@ Phaser.Key.prototype = {
         this.isUp = true;
         this.timeUp = this.game.time.now;
         this.duration = this.game.time.now - this.timeDown;
+        this.enabled = true;
+
+        this.onDown.removeAll();
+        this.onUp.removeAll();
+        this.onHoldCallback = null;
+        this.onHoldContext = null;
 
     },
 

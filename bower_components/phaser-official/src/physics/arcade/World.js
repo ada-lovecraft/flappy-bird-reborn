@@ -13,7 +13,7 @@
 * @param {Phaser.Game} game reference to the current game instance.
 */
 Phaser.Physics.Arcade = function (game) {
-    
+
     /**
     * @property {Phaser.Game} game - Local reference to game.
     */
@@ -340,7 +340,7 @@ Phaser.Physics.Arcade.prototype = {
     * @param {function} [overlapCallback=null] - An optional callback function that is called if the objects overlap. The two objects will be passed to this function in the same order in which you specified them.
     * @param {function} [processCallback=null] - A callback function that lets you perform additional checks against the two objects if they overlap. If this is set then overlapCallback will only be called if processCallback returns true.
     * @param {object} [callbackContext] - The context in which to run the callbacks.
-    * @returns {boolean} True if an overlap occured otherwise false.
+    * @return {boolean} True if an overlap occured otherwise false.
     */
     overlap: function (object1, object2, overlapCallback, processCallback, callbackContext) {
 
@@ -378,10 +378,10 @@ Phaser.Physics.Arcade.prototype = {
     * @method Phaser.Physics.Arcade#collide
     * @param {Phaser.Sprite|Phaser.Group|Phaser.Particles.Emitter|Phaser.Tilemap} object1 - The first object to check. Can be an instance of Phaser.Sprite, Phaser.Group, Phaser.Particles.Emitter, or Phaser.Tilemap.
     * @param {Phaser.Sprite|Phaser.Group|Phaser.Particles.Emitter|Phaser.Tilemap|array} object2 - The second object or array of objects to check. Can be Phaser.Sprite, Phaser.Group, Phaser.Particles.Emitter or Phaser.Tilemap.
-    * @param {function} [collideCallback=null] - An optional callback function that is called if the objects collide. The two objects will be passed to this function in the same order in which you specified them.
+    * @param {function} [collideCallback=null] - An optional callback function that is called if the objects collide. The two objects will be passed to this function in the same order in which you specified them, unless you are colliding Group vs. Sprite, in which case Sprite will always be the first parameter.
     * @param {function} [processCallback=null] - A callback function that lets you perform additional checks against the two objects if they overlap. If this is set then collision will only happen if processCallback returns true. The two objects will be passed to this function in the same order in which you specified them.
     * @param {object} [callbackContext] - The context in which to run the callbacks.
-    * @returns {boolean} True if a collision occured otherwise false.
+    * @return {boolean} True if a collision occured otherwise false.
     */
     collide: function (object1, object2, collideCallback, processCallback, callbackContext) {
 
@@ -651,10 +651,10 @@ Phaser.Physics.Arcade.prototype = {
     collideSpriteVsTilemapLayer: function (sprite, tilemapLayer, collideCallback, processCallback, callbackContext) {
 
         this._mapData = tilemapLayer.getTiles(
-            sprite.body.position.x - sprite.body.tilePadding.x, 
-            sprite.body.position.y - sprite.body.tilePadding.y, 
-            sprite.body.width + sprite.body.tilePadding.x, 
-            sprite.body.height + sprite.body.tilePadding.y, 
+            sprite.body.position.x - sprite.body.tilePadding.x,
+            sprite.body.position.y - sprite.body.tilePadding.y,
+            sprite.body.width + sprite.body.tilePadding.x,
+            sprite.body.height + sprite.body.tilePadding.y,
             false, false);
 
         if (this._mapData.length === 0)
@@ -696,8 +696,8 @@ Phaser.Physics.Arcade.prototype = {
     /**
     * An internal function. Use Phaser.Physics.Arcade.collide instead.
     *
-    * @method Phaser.Physics.Arcade#collideGroupVsTilemapLayer
     * @private
+    * @method Phaser.Physics.Arcade#collideGroupVsTilemapLayer
     * @param {Phaser.Group} group - The Group to check.
     * @param {Phaser.TilemapLayer} tilemapLayer - The layer to check.
     * @param {function} collideCallback - An optional callback function that is called if the objects collide. The two objects will be passed to this function in the same order in which you specified them.
@@ -725,13 +725,14 @@ Phaser.Physics.Arcade.prototype = {
     /**
     * The core separation function to separate two physics bodies.
     *
+    * @private
     * @method Phaser.Physics.Arcade#separate
     * @param {Phaser.Physics.Arcade.Body} body1 - The first Body object to separate.
     * @param {Phaser.Physics.Arcade.Body} body2 - The second Body object to separate.
     * @param {function} [processCallback=null] - A callback function that lets you perform additional checks against the two objects if they overlap. If this function is set then the sprites will only be collided if it returns true.
     * @param {object} [callbackContext] - The context in which to run the process callback.
     * @param {boolean} overlapOnly - Just run an overlap or a full collision.
-    * @returns {boolean} Returns true if the bodies collided, otherwise false.
+    * @return {boolean} Returns true if the bodies collided, otherwise false.
     */
     separate: function (body1, body2, processCallback, callbackContext, overlapOnly) {
 
@@ -803,11 +804,13 @@ Phaser.Physics.Arcade.prototype = {
 
     /**
     * The core separation function to separate two physics bodies on the x axis.
+    *
+    * @private
     * @method Phaser.Physics.Arcade#separateX
     * @param {Phaser.Physics.Arcade.Body} body1 - The Body object to separate.
     * @param {Phaser.Physics.Arcade.Body} body2 - The Body object to separate.
     * @param {boolean} overlapOnly - If true the bodies will only have their overlap data set, no separation or exchange of velocity will take place.
-    * @returns {boolean} Returns true if the bodies were separated, otherwise false.
+    * @return {boolean} Returns true if the bodies were separated, otherwise false.
     */
     separateX: function (body1, body2, overlapOnly) {
 
@@ -916,11 +919,13 @@ Phaser.Physics.Arcade.prototype = {
 
     /**
     * The core separation function to separate two physics bodies on the y axis.
+    *
+    * @private
     * @method Phaser.Physics.Arcade#separateY
     * @param {Phaser.Physics.Arcade.Body} body1 - The Body object to separate.
     * @param {Phaser.Physics.Arcade.Body} body2 - The Body object to separate.
     * @param {boolean} overlapOnly - If true the bodies will only have their overlap data set, no separation or exchange of velocity will take place.
-    * @returns {boolean} Returns true if the bodies were separated, otherwise false.
+    * @return {boolean} Returns true if the bodies were separated, otherwise false.
     */
     separateY: function (body1, body2, overlapOnly) {
 
@@ -1042,10 +1047,12 @@ Phaser.Physics.Arcade.prototype = {
 
     /**
     * The core separation function to separate a physics body and a tile.
+    *
+    * @private
     * @method Phaser.Physics.Arcade#separateTile
     * @param {Phaser.Physics.Arcade.Body} body - The Body object to separate.
     * @param {Phaser.Tile} tile - The tile to collide against.
-    * @returns {boolean} Returns true if the body was separated, otherwise false.
+    * @return {boolean} Returns true if the body was separated, otherwise false.
     */
     separateTile: function (i, body, tile) {
 
@@ -1114,7 +1121,7 @@ Phaser.Physics.Arcade.prototype = {
                     return true;
                 }
             }
-    
+
             if (tile.faceTop || tile.faceBottom)
             {
                 oy = this.tileCheckY(body, tile);
@@ -1132,7 +1139,7 @@ Phaser.Physics.Arcade.prototype = {
                     return true;
                 }
             }
-    
+
             if (tile.faceLeft || tile.faceRight)
             {
                 ox = this.tileCheckX(body, tile);
@@ -1146,11 +1153,11 @@ Phaser.Physics.Arcade.prototype = {
     /**
     * Check the body against the given tile on the X axis.
     *
+    * @private
     * @method Phaser.Physics.Arcade#tileCheckX
-    * @protected
     * @param {Phaser.Physics.Arcade.Body} body - The Body object to separate.
     * @param {Phaser.Tile} tile - The tile to check.
-    * @returns {number} The amount of separation that occured.
+    * @return {number} The amount of separation that occured.
     */
     tileCheckX: function (body, tile) {
 
@@ -1195,11 +1202,11 @@ Phaser.Physics.Arcade.prototype = {
     /**
     * Check the body against the given tile on the Y axis.
     *
+    * @private
     * @method Phaser.Physics.Arcade#tileCheckY
-    * @protected
     * @param {Phaser.Physics.Arcade.Body} body - The Body object to separate.
     * @param {Phaser.Tile} tile - The tile to check.
-    * @returns {number} The amount of separation that occured.
+    * @return {number} The amount of separation that occured.
     */
     tileCheckY: function (body, tile) {
 
@@ -1243,11 +1250,12 @@ Phaser.Physics.Arcade.prototype = {
 
     /**
     * Internal function to process the separation of a physics body from a tile.
+    *
+    * @private
     * @method Phaser.Physics.Arcade#processTileSeparationX
-    * @protected
     * @param {Phaser.Physics.Arcade.Body} body - The Body object to separate.
     * @param {number} x - The x separation amount.
-    * @returns {boolean} Returns true as a pass-thru to the separateTile method.
+    * @return {boolean} Returns true as a pass-thru to the separateTile method.
     */
     processTileSeparationX: function (body, x) {
 
@@ -1275,12 +1283,13 @@ Phaser.Physics.Arcade.prototype = {
 
     /**
     * Internal function to process the separation of a physics body from a tile.
+    *
+    * @private
     * @method Phaser.Physics.Arcade#processTileSeparationY
-    * @protected
     * @param {Phaser.Physics.Arcade.Body} body - The Body object to separate.
     * @param {number} y - The y separation amount.
     */
-    processTileSeparationY: function (body, y, tile) {
+    processTileSeparationY: function (body, y) {
 
         if (y < 0)
         {
@@ -1311,7 +1320,7 @@ Phaser.Physics.Arcade.prototype = {
     * Note: The display object does not continuously track the target. If the target changes location during transit the display object will not modify its course.
     * Note: The display object doesn't stop moving once it reaches the destination coordinates.
     * Note: Doesn't take into account acceleration, maxVelocity or drag (if you've set drag or acceleration too high this object may not move at all)
-    * 
+    *
     * @method Phaser.Physics.Arcade#moveToObject
     * @param {any} displayObject - The display object to move.
     * @param {any} destination - The display object to move towards. Can be any object but must have visible x/y properties.
@@ -1325,13 +1334,13 @@ Phaser.Physics.Arcade.prototype = {
         if (typeof maxTime === 'undefined') { maxTime = 0; }
 
         this._angle = Math.atan2(destination.y - displayObject.y, destination.x - displayObject.x);
-        
+
         if (maxTime > 0)
         {
             //  We know how many pixels we need to move, but how fast?
             speed = this.distanceBetween(displayObject, destination) / (maxTime / 1000);
         }
-        
+
         displayObject.body.velocity.x = Math.cos(this._angle) * speed;
         displayObject.body.velocity.y = Math.sin(this._angle) * speed;
 
@@ -1345,7 +1354,7 @@ Phaser.Physics.Arcade.prototype = {
     * Timings are approximate due to the way browser timers work. Allow for a variance of +- 50ms.
     * Note: The display object does not continuously track the target. If the target changes location during transit the display object will not modify its course.
     * Note: The display object doesn't stop moving once it reaches the destination coordinates.
-    * 
+    *
     * @method Phaser.Physics.Arcade#moveToPointer
     * @param {any} displayObject - The display object to move.
     * @param {number} [speed=60] - The speed it will move, in pixels per second (default is 60 pixels/sec)
@@ -1366,7 +1375,7 @@ Phaser.Physics.Arcade.prototype = {
             //  We know how many pixels we need to move, but how fast?
             speed = this.distanceToPointer(displayObject, pointer) / (maxTime / 1000);
         }
-        
+
         displayObject.body.velocity.x = Math.cos(this._angle) * speed;
         displayObject.body.velocity.y = Math.sin(this._angle) * speed;
 
@@ -1381,7 +1390,7 @@ Phaser.Physics.Arcade.prototype = {
     * Note: The display object does not continuously track the target. If the target changes location during transit the display object will not modify its course.
     * Note: The display object doesn't stop moving once it reaches the destination coordinates.
     * Note: Doesn't take into account acceleration, maxVelocity or drag (if you've set drag or acceleration too high this object may not move at all)
-    * 
+    *
     * @method Phaser.Physics.Arcade#moveToXY
     * @param {any} displayObject - The display object to move.
     * @param {number} x - The x coordinate to move towards.
@@ -1396,13 +1405,13 @@ Phaser.Physics.Arcade.prototype = {
         if (typeof maxTime === 'undefined') { maxTime = 0; }
 
         this._angle = Math.atan2(y - displayObject.y, x - displayObject.x);
-        
+
         if (maxTime > 0)
         {
             //  We know how many pixels we need to move, but how fast?
             speed = this.distanceToXY(displayObject, x, y) / (maxTime / 1000);
         }
-        
+
         displayObject.body.velocity.x = Math.cos(this._angle) * speed;
         displayObject.body.velocity.y = Math.sin(this._angle) * speed;
 
@@ -1413,7 +1422,7 @@ Phaser.Physics.Arcade.prototype = {
     /**
     * Given the angle (in degrees) and speed calculate the velocity and return it as a Point object, or set it to the given point object.
     * One way to use this is: velocityFromAngle(angle, 200, sprite.velocity) which will set the values directly to the sprites velocity and not create a new Point object.
-    * 
+    *
     * @method Phaser.Physics.Arcade#velocityFromAngle
     * @param {number} angle - The angle in degrees calculated in clockwise positive direction (down = 90 degrees positive, right = 0 degrees positive, up = 90 degrees negative)
     * @param {number} [speed=60] - The speed it will move, in pixels per second sq.
@@ -1432,7 +1441,7 @@ Phaser.Physics.Arcade.prototype = {
     /**
     * Given the rotation (in radians) and speed calculate the velocity and return it as a Point object, or set it to the given point object.
     * One way to use this is: velocityFromRotation(rotation, 200, sprite.velocity) which will set the values directly to the sprites velocity and not create a new Point object.
-    * 
+    *
     * @method Phaser.Physics.Arcade#velocityFromRotation
     * @param {number} rotation - The angle in radians.
     * @param {number} [speed=60] - The speed it will move, in pixels per second sq.
@@ -1451,7 +1460,7 @@ Phaser.Physics.Arcade.prototype = {
     /**
     * Given the rotation (in radians) and speed calculate the acceleration and return it as a Point object, or set it to the given point object.
     * One way to use this is: accelerationFromRotation(rotation, 200, sprite.acceleration) which will set the values directly to the sprites acceleration and not create a new Point object.
-    * 
+    *
     * @method Phaser.Physics.Arcade#accelerationFromRotation
     * @param {number} rotation - The angle in radians.
     * @param {number} [speed=60] - The speed it will move, in pixels per second sq.
@@ -1472,7 +1481,7 @@ Phaser.Physics.Arcade.prototype = {
     * You must give a maximum speed value, beyond which the display object won't go any faster.
     * Note: The display object does not continuously track the target. If the target changes location during transit the display object will not modify its course.
     * Note: The display object doesn't stop moving once it reaches the destination coordinates.
-    * 
+    *
     * @method Phaser.Physics.Arcade#accelerateToObject
     * @param {any} displayObject - The display object to move.
     * @param {any} destination - The display object to move towards. Can be any object but must have visible x/y properties.
@@ -1501,7 +1510,7 @@ Phaser.Physics.Arcade.prototype = {
     * You must give a maximum speed value, beyond which the display object won't go any faster.
     * Note: The display object does not continuously track the target. If the target changes location during transit the display object will not modify its course.
     * Note: The display object doesn't stop moving once it reaches the destination coordinates.
-    * 
+    *
     * @method Phaser.Physics.Arcade#accelerateToPointer
     * @param {any} displayObject - The display object to move.
     * @param {Phaser.Pointer} [pointer] - The pointer to move towards. Defaults to Phaser.Input.activePointer.
@@ -1518,7 +1527,7 @@ Phaser.Physics.Arcade.prototype = {
         if (typeof ySpeedMax === 'undefined') { ySpeedMax = 1000; }
 
         this._angle = this.angleToPointer(displayObject, pointer);
-        
+
         displayObject.body.acceleration.setTo(Math.cos(this._angle) * speed, Math.sin(this._angle) * speed);
         displayObject.body.maxVelocity.setTo(xSpeedMax, ySpeedMax);
 
@@ -1531,7 +1540,7 @@ Phaser.Physics.Arcade.prototype = {
     * You must give a maximum speed value, beyond which the display object won't go any faster.
     * Note: The display object does not continuously track the target. If the target changes location during transit the display object will not modify its course.
     * Note: The display object doesn't stop moving once it reaches the destination coordinates.
-    * 
+    *
     * @method Phaser.Physics.Arcade#accelerateToXY
     * @param {any} displayObject - The display object to move.
     * @param {number} x - The x coordinate to accelerate towards.
@@ -1558,7 +1567,7 @@ Phaser.Physics.Arcade.prototype = {
 
     /**
     * Find the distance between two display objects (like Sprites).
-    * 
+    *
     * @method Phaser.Physics.Arcade#distanceBetween
     * @param {any} source - The Display Object to test from.
     * @param {any} target - The Display Object to test to.
@@ -1568,7 +1577,7 @@ Phaser.Physics.Arcade.prototype = {
 
         this._dx = source.x - target.x;
         this._dy = source.y - target.y;
-        
+
         return Math.sqrt(this._dx * this._dx + this._dy * this._dy);
 
     },
@@ -1577,7 +1586,7 @@ Phaser.Physics.Arcade.prototype = {
     * Find the distance between a display object (like a Sprite) and the given x/y coordinates.
     * The calculation is made from the display objects x/y coordinate. This may be the top-left if its anchor hasn't been changed.
     * If you need to calculate from the center of a display object instead use the method distanceBetweenCenters()
-    * 
+    *
     * @method Phaser.Physics.Arcade#distanceToXY
     * @param {any} displayObject - The Display Object to test from.
     * @param {number} x - The x coordinate to move towards.
@@ -1588,7 +1597,7 @@ Phaser.Physics.Arcade.prototype = {
 
         this._dx = displayObject.x - x;
         this._dy = displayObject.y - y;
-        
+
         return Math.sqrt(this._dx * this._dx + this._dy * this._dy);
 
     },
@@ -1597,7 +1606,7 @@ Phaser.Physics.Arcade.prototype = {
     * Find the distance between a display object (like a Sprite) and a Pointer. If no Pointer is given the Input.activePointer is used.
     * The calculation is made from the display objects x/y coordinate. This may be the top-left if its anchor hasn't been changed.
     * If you need to calculate from the center of a display object instead use the method distanceBetweenCenters()
-    * 
+    *
     * @method Phaser.Physics.Arcade#distanceToPointer
     * @param {any} displayObject - The Display Object to test from.
     * @param {Phaser.Pointer} [pointer] - The Phaser.Pointer to test to. If none is given then Input.activePointer is used.
@@ -1609,14 +1618,14 @@ Phaser.Physics.Arcade.prototype = {
 
         this._dx = displayObject.x - pointer.x;
         this._dy = displayObject.y - pointer.y;
-        
+
         return Math.sqrt(this._dx * this._dx + this._dy * this._dy);
 
     },
 
     /**
     * Find the angle in radians between two display objects (like Sprites).
-    * 
+    *
     * @method Phaser.Physics.Arcade#angleBetween
     * @param {any} source - The Display Object to test from.
     * @param {any} target - The Display Object to test to.
@@ -1633,7 +1642,7 @@ Phaser.Physics.Arcade.prototype = {
 
     /**
     * Find the angle in radians between a display object (like a Sprite) and the given x/y coordinate.
-    * 
+    *
     * @method Phaser.Physics.Arcade#angleToXY
     * @param {any} displayObject - The Display Object to test from.
     * @param {number} x - The x coordinate to get the angle to.
@@ -1644,14 +1653,14 @@ Phaser.Physics.Arcade.prototype = {
 
         this._dx = x - displayObject.x;
         this._dy = y - displayObject.y;
-        
+
         return Math.atan2(this._dy, this._dx);
 
     },
-    
+
     /**
     * Find the angle in radians between a display object (like a Sprite) and a Pointer, taking their x/y and center into account.
-    * 
+    *
     * @method Phaser.Physics.Arcade#angleToPointer
     * @param {any} displayObject - The Display Object to test from.
     * @param {Phaser.Pointer} [pointer] - The Phaser.Pointer to test to. If none is given then Input.activePointer is used.
@@ -1663,7 +1672,7 @@ Phaser.Physics.Arcade.prototype = {
 
         this._dx = pointer.worldX - displayObject.x;
         this._dy = pointer.worldY - displayObject.y;
-        
+
         return Math.atan2(this._dy, this._dx);
 
     }

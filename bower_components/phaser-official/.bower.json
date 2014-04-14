@@ -1,6 +1,6 @@
 {
   "name": "phaser",
-  "version": "2.0.1",
+  "version": "2.0.3",
   "homepage": "http://phaser.io",
   "authors": [
     "photonstorm <rich@photonstorm.com>"
@@ -34,13 +34,13 @@
     "test",
     "tests"
   ],
-  "_release": "2.0.1",
+  "_release": "2.0.3",
   "_resolution": {
     "type": "version",
-    "tag": "v2.0.1",
-    "commit": "65e1ae51d87b74fcb6acc330bc12262d2aa0b4f1"
+    "tag": "v2.0.3",
+    "commit": "cdff873cf795c65daba84531631ff8fe6afb61b9"
   },
   "_source": "git://github.com/photonstorm/phaser.git",
-  "_target": "2.0.1",
+  "_target": "2.0.3",
   "_originalSource": "phaser-official"
 }

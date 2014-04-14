@@ -50,7 +50,7 @@ Phaser.Keyboard = function (game) {
     * @private
     */
     this._keys = [];
-    
+
     /**
     * @property {array} _capture - The array the key capture values are stored in.
     * @private
@@ -63,14 +63,20 @@ Phaser.Keyboard = function (game) {
     * @default
     */
     this._onKeyDown = null;
-    
+
     /**
     * @property {function} _onKeyUp
     * @private
     * @default
     */
     this._onKeyUp = null;
-    
+
+    /**
+    * @property {number} _i - Internal cache var
+    * @private
+    */
+    this._i = 0;
+
 };
 
 Phaser.Keyboard.prototype = {
@@ -127,7 +133,7 @@ Phaser.Keyboard.prototype = {
         if (this._keys[keycode])
         {
             this._keys[keycode] = null;
-            
+
             this.removeKeyCapture(keycode);
         }
 
@@ -146,12 +152,12 @@ Phaser.Keyboard.prototype = {
             down: this.addKey(Phaser.Keyboard.DOWN),
             left: this.addKey(Phaser.Keyboard.LEFT),
             right: this.addKey(Phaser.Keyboard.RIGHT)
-        }
+        };
 
     },
 
     /**
-    * Starts the Keyboard event listeners running (keydown and keyup). They are attached to the document.body.
+    * Starts the Keyboard event listeners running (keydown and keyup). They are attached to the window.
     * This is called automatically by Phaser.Input and should not normally be invoked directly.
     *
     * @method Phaser.Keyboard#start
@@ -180,7 +186,7 @@ Phaser.Keyboard.prototype = {
     },
 
     /**
-    * Stops the Keyboard event listeners from running (keydown and keyup). They are removed from the document.body.
+    * Stops the Keyboard event listeners from running (keydown and keyup). They are removed from the window.
     *
     * @method Phaser.Keyboard#stop
     */
@@ -188,6 +194,26 @@ Phaser.Keyboard.prototype = {
 
         window.removeEventListener('keydown', this._onKeyDown);
         window.removeEventListener('keyup', this._onKeyUp);
+
+        this._onKeyDown = null;
+        this._onKeyUp = null;
+
+    },
+
+    /**
+    * Stops the Keyboard event listeners from running (keydown and keyup). They are removed from the window.
+    * Also clears all key captures and currently created Key objects.
+    *
+    * @method Phaser.Keyboard#destroy
+    */
+    destroy: function () {
+
+        this.stop();
+
+        this.clearCaptures();
+
+        this._keys.length = 0;
+        this._i = 0;
 
     },
 
@@ -245,13 +271,13 @@ Phaser.Keyboard.prototype = {
     */
     update: function () {
 
-        var i = this._keys.length;
+        this._i = this._keys.length;
 
-        while (i--)
+        while (this._i--)
         {
-            if (this._keys[i])
+            if (this._keys[this._i])
             {
-                this._keys[i].update();
+                this._keys[this._i].update();
             }
         }
 
@@ -288,7 +314,7 @@ Phaser.Keyboard.prototype = {
         {
             this._keys[event.keyCode] = new Phaser.Key(this.game, event.keyCode);
         }
-        
+
         this._keys[event.keyCode].processKeyDown(event);
 
     },

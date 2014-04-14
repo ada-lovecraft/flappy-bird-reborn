@@ -1,6 +1,5 @@
-// Generated on 2014-03-27 using generator-phaser-official 0.0.6
+// Generated on 2014-03-28 using generator-phaser-official 0.0.8-rc-2
 'use strict';
-var moment = require('moment');
 var config = require('./config.json');
 var _ = require('underscore');
 _.str = require('underscore.string');
@@ -36,14 +35,14 @@ module.exports = function (grunt) {
       options: {
         port: 9000,
         // change this to '0.0.0.0' to access the server from outside
-        hostname: 'localhost'
+        hostname: '0.0.0.0'
       },
       livereload: {
         options: {
           middleware: function (connect) {
             return [
               lrSnippet,
-              mountFolder(connect, '.')
+              mountFolder(connect, 'dist')
             ];
           }
         }
@@ -54,25 +53,31 @@ module.exports = function (grunt) {
         path: 'http://localhost:<%= connect.options.port %>'
       }
     },
-    htmlbuild: {
-      dist: {
-        src: 'templates/_index.html.tpl',
-        dest: 'index.html',
-        options: {
-          scripts: {
-            phaser: 'bower_components/phaser-official/build/phaser.js',
-            gameStates: 'game/states/*.js',
-            gamePrefabs: 'game/prefabs/*.js',
-            gameBootstrapper: 'game/main.js'
-          }
-        }
+    copy: {
+      prod: {
+        files: [
+          // includes files within path and its sub-directories
+          { expand: true, src: ['assets/**'], dest: 'dist/' },
+          { expand: true, flatten: true, src: ['game/plugins/*.js'], dest: 'dist/js/plugins/' },
+          { expand: true, flatten: true, src: ['bower_components/**/build/*.js'], dest: 'dist/js/' },
+          { expand: true, src: ['css/**'], dest: 'dist/' },
+          { expand: true, src: ['index.html'], dest: 'dist/' }
+        ]
+      }
+    },
+    browserify: {
+      
+      build: {
+        src: ['game/main.js'],
+        dest: 'dist/js/game.js'
       }
     }
   });
   
-  grunt.registerTask('build', ['htmlbuild', 'buildBootstrapper']);
+  grunt.registerTask('build', ['buildBootstrapper', 'browserify','copy']);
   grunt.registerTask('serve', ['build', 'connect:livereload', 'open', 'watch']);
   grunt.registerTask('default', ['serve']);
+  grunt.registerTask('prod', ['build', 'copy']);
 
   grunt.registerTask('buildBootstrapper', 'builds the bootstrapper file correctly', function() {
     var stateFiles = grunt.file.expand('game/states/*.js');

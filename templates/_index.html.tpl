@@ -4,25 +4,12 @@
 <!--[if IE 8]>         <html class="lt-ie9"> <![endif]-->
 <!--[if gt IE 8]><!--> <html> <!--<![endif]-->
 <head>
-  <title>Flappy bird reborn</title>
+  <title>Flappy Bird Reborn</title>
   <link href="css/styles.css" rel="stylesheet" type="text/css">
 </head>
 <body>
   <div id="flappy-bird-reborn"></div>
-
-  <!-- build:script phaser -->
-  <!-- /build -->
-
-  <!-- build:script gameBootstrapper -->
-  <!-- /build -->
-
-  <!-- build:script gameStates -->
-  <!-- /build -->
-
-  <!-- build:script gamePrefabs -->
-  <!-- /build -->
-
-
-
+  <script src="js/phaser.js"></script>
+  <script src="js/game.js"></script>
 </body>
 </html>

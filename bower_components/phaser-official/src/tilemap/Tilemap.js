@@ -177,7 +177,7 @@ Phaser.Tilemap.prototype = {
     * @param {Phaser.Group} [group] - Optional Group to add the layer to. If not specified it will be added to the World group.
     * @return {Phaser.TilemapLayer} The TilemapLayer object. This is an extension of Phaser.Image and can be moved around the display list accordingly.
     */
-    create: function (name, width, height, tileWidth, tileHeight) {
+    create: function (name, width, height, tileWidth, tileHeight, group) {
 
         if (typeof group === 'undefined') { group = this.game.world; }
 
@@ -758,7 +758,7 @@ Phaser.Tilemap.prototype = {
             }
         }
 
-        for (var y = 0; y < this.layers[layer].height ; y++)
+        for (var y = 0; y < this.layers[layer].height; y++)
         {
             for (var x = 0; x < this.layers[layer].width; x++)
             {
@@ -996,21 +996,82 @@ Phaser.Tilemap.prototype = {
     */
     hasTile: function (x, y, layer) {
 
+        layer = this.getLayer(layer);
+
         return (this.layers[layer].data[y] !== null && this.layers[layer].data[y][x] !== null);
 
     },
 
     /**
+    * Removes the tile located at the given coordinates and updates the collision data.
+    *
+    * @method Phaser.Tilemap#removeTile
+    * @param {number} x - X position to place the tile (given in tile units, not pixels)
+    * @param {number} y - Y position to place the tile (given in tile units, not pixels)
+    * @param {number|string|Phaser.TilemapLayer} [layer] - The layer to modify.
+    * @return {Phaser.Tile} The Tile object that was removed from this map.
+    */
+    removeTile: function (x, y, layer) {
+
+        layer = this.getLayer(layer);
+
+        if (x >= 0 && x < this.layers[layer].width && y >= 0 && y < this.layers[layer].height)
+        {
+            if (this.hasTile(x, y, layer))
+            {
+                var tile = this.layers[layer].data[y][x];
+
+                this.layers[layer].data[y][x] = null;
+
+                this.layers[layer].dirty = true;
+
+                this.calculateFaces(layer);
+
+                return tile;
+            }
+        }
+
+    },
+
+    /**
+    * Removes the tile located at the given coordinates and updates the collision data. The coordinates are given in pixel values.
+    *
+    * @method Phaser.Tilemap#removeTileWorldXY
+    * @param {number} x - X position to insert the tile (given in pixels)
+    * @param {number} y - Y position to insert the tile (given in pixels)
+    * @param {number} tileWidth - The width of the tile in pixels.
+    * @param {number} tileHeight - The height of the tile in pixels.
+    * @param {number|string|Phaser.TilemapLayer} [layer] - The layer to modify.
+    * @return {Phaser.Tile} The Tile object that was removed from this map.
+    */
+    removeTileWorldXY: function (x, y, tileWidth, tileHeight, layer) {
+
+        layer = this.getLayer(layer);
+
+        x = this.game.math.snapToFloor(x, tileWidth) / tileWidth;
+        y = this.game.math.snapToFloor(y, tileHeight) / tileHeight;
+
+        return this.removeTile(x, y, layer);
+
+    },
+
+    /**
     * Puts a tile of the given index value at the coordinate specified.
+    * If you pass `null` as the tile it will pass your call over to Tilemap.removeTile instead.
     *
     * @method Phaser.Tilemap#putTile
-    * @param {Phaser.Tile|number} tile - The index of this tile to set or a Phaser.Tile object.
+    * @param {Phaser.Tile|number|null} tile - The index of this tile to set or a Phaser.Tile object. If null the tile is removed from the map.
     * @param {number} x - X position to place the tile (given in tile units, not pixels)
     * @param {number} y - Y position to place the tile (given in tile units, not pixels)
     * @param {number|string|Phaser.TilemapLayer} [layer] - The layer to modify.
     * @return {Phaser.Tile} The Tile object that was created or added to this map.
     */
     putTile: function (tile, x, y, layer) {
+
+        if (tile === null)
+        {
+            return this.removeTile(x, y, layer);
+        }
 
         layer = this.getLayer(layer);
 
@@ -1057,7 +1118,7 @@ Phaser.Tilemap.prototype = {
             this.layers[layer].dirty = true;
 
             this.calculateFaces(layer);
-            
+
             return this.layers[layer].data[y][x];
         }
 
@@ -1075,6 +1136,7 @@ Phaser.Tilemap.prototype = {
     * @param {number} tileWidth - The width of the tile in pixels.
     * @param {number} tileHeight - The height of the tile in pixels.
     * @param {number|string|Phaser.TilemapLayer} [layer] - The layer to modify.
+    * @return {Phaser.Tile} The Tile object that was created or added to this map.
     */
     putTileWorldXY: function (tile, x, y, tileWidth, tileHeight, layer) {
 
@@ -1083,7 +1145,7 @@ Phaser.Tilemap.prototype = {
         x = this.game.math.snapToFloor(x, tileWidth) / tileWidth;
         y = this.game.math.snapToFloor(y, tileHeight) / tileHeight;
 
-        this.putTile(tile, x, y, layer);
+        return this.putTile(tile, x, y, layer);
 
     },
 
@@ -1180,7 +1242,7 @@ Phaser.Tilemap.prototype = {
 
         this._results.length = 0;
 
-        this._results.push( { x: x, y: y, width: width, height: height, layer: layer });
+        this._results.push({ x: x, y: y, width: width, height: height, layer: layer });
 
         for (var ty = y; ty < y + height; ty++)
         {
@@ -1207,7 +1269,7 @@ Phaser.Tilemap.prototype = {
 
         if (typeof x === "undefined") { x = 0; }
         if (typeof y === "undefined") { y = 0; }
-        
+
         layer = this.getLayer(layer);
 
         if (!tileblock || tileblock.length < 2)
