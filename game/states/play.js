@@ -52,7 +52,7 @@ Play.prototype = {
 
     this.score = 0;
     this.scoreText = this.game.add.bitmapText(this.game.width/2, 10, 'flappyfont',this.score.toString(), 24);
-    
+
     this.instructionGroup = this.game.add.group();
     this.instructionGroup.add(this.game.add.sprite(this.game.width/2, 100,'getReady'));
     this.instructionGroup.add(this.game.add.sprite(this.game.width/2, 325,'instructions'));
@@ -91,9 +91,8 @@ Play.prototype = {
   },
   startGame: function() {
     if(!this.bird.alive && !this.gameover) {
-        this.bird.alive = true;
         this.bird.body.allowGravity = true;
-        
+        this.bird.alive = true;
         // add a timer
         this.pipeGenerator = this.game.time.events.loop(Phaser.Timer.SECOND * 1.25, this.generatePipes, this);
         this.pipeGenerator.timer.start();
@@ -116,7 +115,6 @@ Play.prototype = {
         this.game.add.existing(this.scoreboard);
         this.scoreboard.show(this.score);
         this.bird.onGround = true;
-
     } else if (enemy instanceof Pipe){
         this.pipeHitSound.play();
     }

@@ -88,7 +88,7 @@ Scoreboard.prototype.show = function(score) {
 };
 
 Scoreboard.prototype.startClick = function() {
-  this.game.state.start('play', true, false);
+  this.game.state.start('play');
 };
 
 

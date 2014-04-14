@@ -12,7 +12,6 @@ var Bird = function(game, x, y, frame) {
   this.alive = false;
   this.onGround = false;
 
-  
 
   // enable physics on the bird
   // and disable gravity on the bird
