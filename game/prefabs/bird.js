@@ -40,6 +40,9 @@ Bird.prototype.update = function() {
   if(!this.alive) {
     this.body.velocity.x = 0;
   }
+  if(this.y < 0){
+    this.y = 0;
+  }
 };
 
 Bird.prototype.flap = function() {
